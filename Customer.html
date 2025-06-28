@@ -579,49 +579,83 @@
 <div id="dashboard" class="page">
     <section class="dashboard">
         <div class="container">
-            <div class="dashboard-header">
-                <h2 id="dashboard-welcome">Welcome back, Student!</h2>
-                <p>Track your orders and order history</p>
-            </div>
-
-            <h3 style="margin-bottom: 1rem;">Active Orders</h3>
-            <div class="order-card">
-                <div style="display: flex; justify-content: between; align-items: center;">
-                    <div>
-                        <h4>Order #QQ001</h4>
-                        <p>Campus Cafe • Chicken Chop, Teh Tarik</p>
-                        <small>Ordered at 12:30 PM</small>
+            <div style="display: grid; grid-template-columns: 1fr 300px; gap: 2rem; align-items: start;">
+                <!-- 左边：订单内容 -->
+                <div>
+                    <div class="dashboard-header">
+                        <h2 id="dashboard-welcome">Welcome back, Student!</h2>
+                        <p>Track your orders and order history</p>
                     </div>
-                    <span class="status-badge status-preparing">Preparing</span>
-                </div>
-                <div style="margin-top: 1rem;">
-                    <strong>Estimated ready time: 12:45 PM</strong>
-                </div>
-            </div>
 
-            <div class="order-card">
-                <div style="display: flex; justify-content: between; align-items: center;">
-                    <div>
-                        <h4>Order #QQ002</h4>
-                        <p>Fresh Juice Bar • Mango Smoothie</p>
-                        <small>Ordered at 12:25 PM</small>
+                    <h3 style="margin-bottom: 1rem;">Active Orders</h3>
+
+                    <div class="order-card">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <h4>Order #QQ001</h4>
+                                <p>Campus Cafe • Chicken Chop, Teh Tarik</p>
+                                <small>Ordered at 12:30 PM</small>
+                            </div>
+                            <span class="status-badge status-preparing">Preparing</span>
+                        </div>
+                        <div style="margin-top: 1rem;">
+                            <strong>Estimated ready time: 12:45 PM</strong>
+                        </div>
                     </div>
-                    <span class="status-badge status-ready">Ready for Pickup</span>
-                </div>
-                <div style="margin-top: 1rem;">
-                    <strong>Ready now! Please collect at counter.</strong>
-                </div>
-            </div>
 
-            <h3 style="margin: 2rem 0 1rem;">Order History</h3>
-            <div class="order-card">
-                <h4>Order #QQ000</h4>
-                <p>Noodle Corner • Char Kway Teow, Wonton Mee</p>
-                <small>Completed yesterday at 1:15 PM • RM 14.40</small>
+                    <div class="order-card">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <h4>Order #QQ002</h4>
+                                <p>Fresh Juice Bar • Mango Smoothie</p>
+                                <small>Ordered at 12:25 PM</small>
+                            </div>
+                            <span class="status-badge status-ready">Ready for Pickup</span>
+                        </div>
+                        <div style="margin-top: 1rem;">
+                            <strong>Ready now! Please collect at counter.</strong>
+                        </div>
+                    </div>
+
+                    <h3 style="margin: 2rem 0 1rem;">Order History</h3>
+
+                    <div class="order-card">
+                        <h4>Order #QQ000</h4>
+                        <p>Noodle Corner • Char Kway Teow, Wonton Mee</p>
+                        <small>Completed yesterday at 1:15 PM • RM 14.40</small>
+                    </div>
+                </div>
+
+                <!-- 右边：Loyalty Program -->
+                <div>
+                    <div class="order-card" style="position: sticky; top: 140px;">
+                        <h3>Loyalty Program</h3>
+                        <p><strong>Current Points:</strong> <span id="loyalty-points">120</span> pts</p>
+                        <p><strong>Status:</strong> <span id="loyalty-level">Gold Member</span></p>
+
+                        <div style="margin-top: 1rem;">
+                            <p style="margin-bottom: 0.5rem;"><strong>Progress to Platinum:</strong></p>
+                            <div style="background: #eee; border-radius: 20px; overflow: hidden;">
+                                <div style="width: 60%; background: #4ECDC4; height: 10px;"></div>
+                            </div>
+                            <small>80 pts to next level</small>
+                        </div>
+
+                        <div style="margin-top: 1.5rem;">
+                            <p><strong>Redeem Rewards:</strong></p>
+                            <ul style="padding-left: 1rem;">
+                                <li>🎁 Free Teh Tarik (200 pts)</li>
+                                <li>🎁 RM5 Off Coupon (300 pts)</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
     </section>
 </div>
+
 
 <!-- Footer -->
 <footer>
@@ -705,6 +739,30 @@
             showPage('dashboard');
         }
     }
+    let loyaltyPoints = 120;
+
+    function checkout() {
+        if (cart.length > 0) {
+            loyaltyPoints += Math.floor(cartTotal); // 每消费 RM1 得 1 积分
+            document.getElementById('loyalty-points').textContent = loyaltyPoints;
+
+            if (loyaltyPoints >= 300) {
+                document.getElementById('loyalty-level').textContent = "Platinum Member";
+            } else if (loyaltyPoints >= 200) {
+                document.getElementById('loyalty-level').textContent = "Gold Member";
+            } else {
+                document.getElementById('loyalty-level').textContent = "Silver Member";
+            }
+
+            alert(`Order confirmed! You now have ${loyaltyPoints} points.`);
+
+            cart = [];
+            cartTotal = 0;
+            updateCartDisplay();
+            showPage('dashboard');
+        }
+    }
+
 
     // Initialize cart display
     updateCartDisplay();
