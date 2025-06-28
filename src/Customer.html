@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title><!DOCTYPE html>
+        <html lang="en">
+        <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>QuickQueue - The Smart Way to Skip the Line</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, #FF6B6B, #4ECDC4);
+            color: white;
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: white;
+            border-radius: 50%;
+            margin-right: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #FF6B6B;
+            font-weight: bold;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            transition: opacity 0.3s;
+        }
+
+        .nav-links a:hover {
+            opacity: 0.8;
+        }
+
+        .cta-button {
+            background: white;
+            color: #FF6B6B;
+            padding: 0.5rem 1.5rem;
+            border: none;
+            border-radius: 25px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .cta-button:hover {
+            transform: scale(1.05);
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #FF6B6B, #4ECDC4);
+            color: white;
+            padding: 120px 0 80px;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            animation: fadeInUp 1s ease;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            animation: fadeInUp 1s ease 0.2s both;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            animation: fadeInUp 1s ease 0.4s both;
+        }
+
+        .btn-primary, .btn-secondary {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: white;
+            color: #FF6B6B;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: white;
+            border: 2px solid white;
+        }
+
+        .btn-primary:hover, .btn-secondary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        /* Features Section */
+        .features {
+            padding: 80px 0;
+            background: #f8f9fa;
+        }
+
+        .features h2 {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            color: #2c3e50;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            text-align: center;
+            transition: transform 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #FF6B6B, #4ECDC4);
+            border-radius: 50%;
+            margin: 0 auto 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+        }
+
+        /* Ordering Interface */
+        .ordering-demo {
+            padding: 80px 0;
+            background: white;
+        }
+
+        .demo-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        .demo-phone {
+            background: #333;
+            border-radius: 25px;
+            padding: 20px;
+            max-width: 300px;
+            margin: 0 auto;
+        }
+
+        .demo-screen {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            height: 500px;
+            overflow-y: auto;
+        }
+
+        .vendor-card {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .vendor-card:hover {
+            background: #e9ecef;
+        }
+
+        .vendor-card.active {
+            background: #FF6B6B;
+            color: white;
+        }
+
+        .menu-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .add-btn {
+            background: #4ECDC4;
+            color: white;
+            border: none;
+            border-radius: 15px;
+            padding: 0.3rem 0.8rem;
+            cursor: pointer;
+        }
+
+        /* Stats Section */
+        .stats {
+            background: linear-gradient(135deg, #2c3e50, #3498db);
+            color: white;
+            padding: 60px 0;
+            text-align: center;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+        }
+
+        .stat-item h3 {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Footer */
+        footer {
+            background: #2c3e50;
+            color: white;
+            padding: 40px 0;
+            text-align: center;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .demo-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Active Page States */
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        .dashboard {
+            padding: 120px 0 60px;
+            min-height: 100vh;
+            background: #f8f9fa;
+        }
+
+        .dashboard-header {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .order-card {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .status-badge {
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .status-preparing {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .status-ready {
+            background: #d4edda;
+            color: #155724;
+        }
+    </style>
+</head>
+<body>
+<!-- Header -->
+<header>
+    <nav class="container">
+        <div class="logo">
+            <div class="logo-icon">Q</div>
+            QuickQueue
+        </div>
+        <ul class="nav-links">
+            <li><a href="#" onclick="showPage('home')">Home</a></li>
+            <li><a href="#" onclick="showPage('order')">Order Now</a></li>
+            <li><a href="#" onclick="showPage('dashboard')">Dashboard</a></li>
+        </ul>
+        <button class="cta-button" onclick="showPage('order')">Order Now</button>
+        <a href="login.html" style="text-decoration: none;">
+            <button style="background-color: white; color: #ff6b6b; font-weight: bold; padding: 0.5rem 1.2rem; border: none; border-radius: 20px; cursor: pointer;">
+                Logout
+            </button>
+        </a>
+
+    </nav>
+</header>
+
+
+<!-- Home Page -->
+<div id="home" class="page active">
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h1>QuickQueue</h1>
+            <p>The Smart Way to Skip the Line</p>
+            <div class="hero-buttons">
+                <button class="btn-primary" onclick="showPage('order')">Start Ordering</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features">
+        <div class="container">
+            <h2>What Do We Offer?</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🍽️</div>
+                    <h3>Pre-Order System</h3>
+                    <p>Web-based food pre-ordering platform designed to eliminate long cafeteria queues for university students</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <h3>Efficient Operations</h3>
+                    <p>Streamlined order management for vendors, reducing crowd congestion and improving service</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📱</div>
+                    <h3>User-Friendly Experience</h3>
+                    <p>Seamless platform with real-time updates, enhancing convenience for students and vendors</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🌐</div>
+                    <h3>Easy Access</h3>
+                    <p>QuickQueue can easily access in the browser - no need to download an app</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Demo Section -->
+    <section class="ordering-demo">
+        <div class="container">
+            <div class="demo-container">
+                <div>
+                    <h2>How It Works</h2>
+                    <p style="font-size: 1.1rem; margin-bottom: 2rem;">Simple, fast, and efficient food ordering for campus life</p>
+                    <ul style="font-size: 1rem; line-height: 2;">
+                        <li>Browse available food vendors on campus</li>
+                        <li>Select your favorite meals and customize orders</li>
+                        <li>Pay securely and get real-time order updates</li>
+                        <li>Skip the queue and collect your food when ready</li>
+                    </ul>
+                </div>
+                <div class="demo-phone">
+                    <div class="demo-screen">
+                        <h4 style="margin-bottom: 1rem;">Campus Vendors</h4>
+                        <div class="vendor-card active">
+                            <strong>Campus Cafe</strong><br>
+                            <small>Western & Local Food • 5-10 min</small>
+                        </div>
+                        <div class="vendor-card">
+                            <strong>Noodle Corner</strong><br>
+                            <small>Asian Cuisine • 8-12 min</small>
+                        </div>
+                        <div class="vendor-card">
+                            <strong>Fresh Juice Bar</strong><br>
+                            <small>Beverages & Smoothies • 3-5 min</small>
+                        </div>
+                        <div style="margin-top: 1rem;">
+                            <h5>Popular Items:</h5>
+                            <div class="menu-item">
+                                <span>Chicken Rice</span>
+                                <button class="add-btn">Add</button>
+                            </div>
+                            <div class="menu-item">
+                                <span>Nasi Lemak</span>
+                                <button class="add-btn">Add</button>
+                            </div>
+                            <div class="menu-item">
+                                <span>Teh Tarik</span>
+                                <button class="add-btn">Add</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <h3>0</h3>
+                    <p>Minutes Waiting</p>
+                </div>
+                <div class="stat-item">
+                    <h3>50+</h3>
+                    <p>Campus Vendors</p>
+                </div>
+                <div class="stat-item">
+                    <h3>1000+</h3>
+                    <p>Happy Students</p>
+                </div>
+                <div class="stat-item">
+                    <h3>24/7</h3>
+                    <p>Service Available</p>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<!-- Order Page -->
+<div id="order" class="page">
+    <section class="dashboard">
+        <div class="container">
+            <div class="dashboard-header">
+                <h2>Order Your Food</h2>
+                <p>Select from our campus vendors and skip the queue!</p>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 300px; gap: 2rem;">
+                <div>
+                    <div class="order-card">
+                        <h3>🍽️ Campus Cafe</h3>
+                        <p>Western & Local Food • Estimated: 8-12 mins</p>
+                        <div style="margin-top: 1rem;">
+                            <div class="menu-item">
+                                <span><strong>Chicken Chop</strong><br><small>RM 12.90</small></span>
+                                <button class="add-btn" onclick="addToCart('Chicken Chop', 12.90)">Add</button>
+                            </div>
+                            <div class="menu-item">
+                                <span><strong>Nasi Lemak</strong><br><small>RM 8.50</small></span>
+                                <button class="add-btn" onclick="addToCart('Nasi Lemak', 8.50)">Add</button>
+                            </div>
+                            <div class="menu-item">
+                                <span><strong>Fish & Chips</strong><br><small>RM 15.90</small></span>
+                                <button class="add-btn" onclick="addToCart('Fish & Chips', 15.90)">Add</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="order-card">
+                        <h3>🍜 Noodle Corner</h3>
+                        <p>Asian Cuisine • Estimated: 5-8 mins</p>
+                        <div style="margin-top: 1rem;">
+                            <div class="menu-item">
+                                <span><strong>Char Kway Teow</strong><br><small>RM 7.50</small></span>
+                                <button class="add-btn" onclick="addToCart('Char Kway Teow', 7.50)">Add</button>
+                            </div>
+                            <div class="menu-item">
+                                <span><strong>Wonton Mee</strong><br><small>RM 6.90</small></span>
+                                <button class="add-btn" onclick="addToCart('Wonton Mee', 6.90)">Add</button>
+                            </div>
+                            <div class="menu-item">
+                                <span><strong>Laksa</strong><br><small>RM 8.90</small></span>
+                                <button class="add-btn" onclick="addToCart('Laksa', 8.90)">Add</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Cart Sidebar -->
+                <div>
+                    <div class="order-card" style="position: sticky; top: 140px;">
+                        <h3>Your Cart</h3>
+                        <div id="cart-items">
+                            <p style="color: #666; text-align: center; padding: 2rem;">Your cart is empty</p>
+                        </div>
+                        <div id="cart-total" style="margin-top: 1rem; padding-top: 1rem; border-top: 2px solid #eee;">
+                            <strong>Total: RM 0.00</strong>
+                        </div>
+                        <button id="checkout-btn" class="btn-primary" style="width: 100%; margin-top: 1rem;" onclick="checkout()" disabled>
+                            Checkout
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<!-- Dashboard Page -->
+<div id="dashboard" class="page">
+    <section class="dashboard">
+        <div class="container">
+            <div class="dashboard-header">
+                <h2 id="dashboard-welcome">Welcome back, Student!</h2>
+                <p>Track your orders and order history</p>
+            </div>
+
+            <h3 style="margin-bottom: 1rem;">Active Orders</h3>
+            <div class="order-card">
+                <div style="display: flex; justify-content: between; align-items: center;">
+                    <div>
+                        <h4>Order #QQ001</h4>
+                        <p>Campus Cafe • Chicken Chop, Teh Tarik</p>
+                        <small>Ordered at 12:30 PM</small>
+                    </div>
+                    <span class="status-badge status-preparing">Preparing</span>
+                </div>
+                <div style="margin-top: 1rem;">
+                    <strong>Estimated ready time: 12:45 PM</strong>
+                </div>
+            </div>
+
+            <div class="order-card">
+                <div style="display: flex; justify-content: between; align-items: center;">
+                    <div>
+                        <h4>Order #QQ002</h4>
+                        <p>Fresh Juice Bar • Mango Smoothie</p>
+                        <small>Ordered at 12:25 PM</small>
+                    </div>
+                    <span class="status-badge status-ready">Ready for Pickup</span>
+                </div>
+                <div style="margin-top: 1rem;">
+                    <strong>Ready now! Please collect at counter.</strong>
+                </div>
+            </div>
+
+            <h3 style="margin: 2rem 0 1rem;">Order History</h3>
+            <div class="order-card">
+                <h4>Order #QQ000</h4>
+                <p>Noodle Corner • Char Kway Teow, Wonton Mee</p>
+                <small>Completed yesterday at 1:15 PM • RM 14.40</small>
+            </div>
+        </div>
+    </section>
+</div>
+
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <p>&copy; 2024 QuickQueue. Transforming Campus Dining Experience.</p>
+    </div>
+</footer>
+
+<script>
+    let cart = [];
+    let cartTotal = 0;
+    let currentUser = '';
+
+    function login() {
+        const username = document.getElementById('username').value.trim();
+        if (username) {
+            currentUser = username;
+            // Update dashboard welcome message
+            document.getElementById('dashboard-welcome').textContent = `Welcome back, ${username}!`;
+            showPage('home');
+        } else {
+            alert('Please enter your name to continue');
+        }
+    }
+
+    // Allow Enter key to login
+    document.addEventListener('DOMContentLoaded', function() {
+        const usernameInput = document.getElementById('username');
+        if (usernameInput) {
+            usernameInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    login();
+                }
+            });
+        }
+    });
+
+    function showPage(pageId) {
+        // Hide all pages
+        document.querySelectorAll('.page').forEach(page => {
+            page.classList.remove('active');
+        });
+
+        // Show selected page
+        document.getElementById(pageId).classList.add('active');
+    }
+
+    function addToCart(itemName, price) {
+        cart.push({ name: itemName, price: price });
+        cartTotal += price;
+        updateCartDisplay();
+    }
+
+    function updateCartDisplay() {
+        const cartItems = document.getElementById('cart-items');
+        const cartTotalElement = document.getElementById('cart-total');
+        const checkoutBtn = document.getElementById('checkout-btn');
+
+        if (cart.length === 0) {
+            cartItems.innerHTML = '<p style="color: #666; text-align: center; padding: 2rem;">Your cart is empty</p>';
+            checkoutBtn.disabled = true;
+        } else {
+            cartItems.innerHTML = cart.map(item =>
+                `<div style="display: flex; justify-content: space-between; padding: 0.5rem 0; border-bottom: 1px solid #eee;">
+                        <span>${item.name}</span>
+                        <span>RM ${item.price.toFixed(2)}</span>
+                    </div>`
+            ).join('');
+            checkoutBtn.disabled = false;
+        }
+
+        cartTotalElement.innerHTML = `<strong>Total: RM ${cartTotal.toFixed(2)}</strong>`;
+    }
+
+    function checkout() {
+        if (cart.length > 0) {
+            alert(`Order confirmed! Total: RM ${cartTotal.toFixed(2)}\n\nYou will receive a notification when your order is ready for pickup.`);
+            cart = [];
+            cartTotal = 0;
+            updateCartDisplay();
+            showPage('dashboard');
+        }
+    }
+
+    // Initialize cart display
+    updateCartDisplay();
+</script>
+</body>
+</html></title>
+</head>
+<body>
+
+</body>
+</html>

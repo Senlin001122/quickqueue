@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>QuickQueue Vendor Panel</title>
+  <link rel="stylesheet" href="style.css" /> <!-- 可复用你原本的CSS -->
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background: #f8f9fa;
+      margin: 0;
+      min-height: 100vh;
+      overflow-y: auto;
+    }
+
+    header {
+      background: linear-gradient(135deg, #FF6B6B, #4ECDC4);
+      color: white;
+      padding: 1rem 0;
+      position: fixed;
+      width: 100%;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      font-size: 1.5rem;
+      font-weight: bold;
+    }
+
+    .logo-icon {
+      width: 40px;
+      height: 40px;
+      background: white;
+      border-radius: 50%;
+      margin-right: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #FF6B6B;
+    }
+
+    main {
+      padding: 120px 20px 40px;
+    }
+
+    .section {
+      background: white;
+      padding: 2rem;
+      border-radius: 15px;
+      margin-bottom: 2rem;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+
+    h2 {
+      margin-bottom: 1rem;
+      color: #2c3e50;
+    }
+
+    .menu-item, .order-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.8rem;
+      border-bottom: 1px solid #eee;
+    }
+
+    .btn {
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 25px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .btn-primary {
+      background: #4ECDC4;
+      color: white;
+    }
+
+    .btn-danger {
+      background: #FF6B6B;
+      color: white;
+    }
+
+    .form-inline input {
+      padding: 0.6rem;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+      margin-right: 1rem;
+    }
+
+    .form-inline {
+      margin-bottom: 1rem;
+    }
+
+    footer {
+      background: #2c3e50;
+      color: white;
+      text-align: center;
+      padding: 1.5rem 0;
+    }
+    .vendor-hero {
+      background: linear-gradient(135deg, #FF6B6B, #4ECDC4);
+      color: white;
+      padding: 60px 20px;
+      border-radius: 0 0 20px 20px;
+      text-align: center;
+      margin-top: 80px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+
+    .vendor-hero-content h1 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      animation: fadeInDown 1s ease-out;
+    }
+
+    .vendor-hero-content p {
+      font-size: 1.2rem;
+      opacity: 0.9;
+      animation: fadeInUp 1s ease-out;
+    }
+
+    @keyframes fadeInDown {
+      from {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+  </style>
+</head>
+<body>
+<header>
+  <div class="container">
+    <nav>
+      <div class="logo">
+        <div class="logo-icon">Q</div>
+        QuickQueue Vendor
+      </div>
+      <div>
+        <a href="#" onclick="goBackHome()" style="color:white; text-decoration:none; font-weight:bold;">Back to Home</a>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<main class="container">
+  <section class="vendor-hero">
+    <div class="vendor-hero-content">
+      <h1>Welcome to Your Vendor Dashboard</h1>
+      <p>Manage your orders, menu, and serve students efficiently</p>
+    </div>
+  </section>
+
+  <!-- Orders Section -->
+  <section class="section">
+    <h2>Incoming Orders</h2>
+    <div id="orders">
+      <div class="order-item">
+        <div>
+          <strong>Order #Q102</strong> - Chicken Chop, Teh Tarik <br/>
+          <small>Ordered by Aina at 12:20 PM</small>
+        </div>
+        <button class="btn btn-primary" onclick="markReady(this)">Mark as Ready</button>
+      </div>
+      <div class="order-item">
+        <div>
+          <strong>Order #Q103</strong> - Nasi Lemak x2 <br/>
+          <small>Ordered by Hanif at 12:25 PM</small>
+        </div>
+        <button class="btn btn-primary" onclick="markReady(this)">Mark as Ready</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Menu Section -->
+  <section class="section">
+    <h2>Manage Menu</h2>
+    <form class="form-inline" onsubmit="addMenu(event)">
+      <input type="text" id="itemName" placeholder="Item name" required />
+      <input type="number" id="itemPrice" placeholder="Price (RM)" step="0.01" required />
+      <button type="submit" class="btn btn-primary">Add Item</button>
+    </form>
+    <div id="menu-list">
+      <div class="menu-item">
+        <span><strong>Fried Rice</strong> - RM 7.00</span>
+        <button class="btn btn-danger" onclick="removeItem(this)">Remove</button>
+      </div>
+      <div class="menu-item">
+        <span><strong>Nasi Lemak</strong> - RM 8.00</span>
+        <button class="btn btn-danger" onclick="removeItem(this)">Remove</button>
+      </div>
+      <div class="menu-item">
+        <span><strong>Mee Goreng Mamak</strong> - RM 7.50</span>
+        <button class="btn btn-danger" onclick="removeItem(this)">Remove</button>
+      </div>
+      <div class="menu-item">
+        <span><strong>Char Kway Teow</strong> - RM 7.00</span>
+        <button class="btn btn-danger" onclick="removeItem(this)">Remove</button>
+      </div>
+      <div class="menu-item">
+        <span><strong>Roti Canai with Curry</strong> - RM 3.00</span>
+        <button class="btn btn-danger" onclick="removeItem(this)">Remove</button>
+      </div>
+      <div class="menu-item">
+        <span><strong>Chicken Rendang</strong> - RM 10.00</span>
+        <button class="btn btn-danger" onclick="removeItem(this)">Remove</button>
+      </div>
+      <div class="menu-item">
+        <span><strong>Laksa</strong> - RM 9.00</span>
+        <button class="btn btn-danger" onclick="removeItem(this)">Remove</button>
+      </div>
+      <div class="menu-item">
+        <span><strong>Nasi Ayam</strong> - RM 8.50</span>
+        <button class="btn btn-danger" onclick="removeItem(this)">Remove</button>
+      </div>
+      <div class="menu-item">
+        <span><strong>Maggi Goreng</strong> - RM 6.00</span>
+        <button class="btn btn-danger" onclick="removeItem(this)">Remove</button>
+      </div>
+      <div class="menu-item">
+        <span><strong>Teh Tarik</strong> - RM 2.50</span>
+        <button class="btn btn-danger" onclick="removeItem(this)">Remove</button>
+      </div>
+      <div class="menu-item">
+        <span><strong>Milo Ais</strong> - RM 2.80</span>
+        <button class="btn btn-danger" onclick="removeItem(this)">Remove</button>
+      </div>
+      <div class="menu-item">
+        <span><strong>Sirap Bandung</strong> - RM 2.00</span>
+        <button class="btn btn-danger" onclick="removeItem(this)">Remove</button>
+      </div>
+    </div>
+
+  </section>
+</main>
+
+<footer>
+  <div class="container">
+    <p>&copy; 2024 QuickQueue Vendor Panel</p>
+  </div>
+</footer>
+
+<script>
+  function markReady(button) {
+    button.textContent = "Ready!";
+    button.disabled = true;
+  }
+
+  function addMenu(event) {
+    event.preventDefault();
+    const name = document.getElementById('itemName').value.trim();
+    const price = parseFloat(document.getElementById('itemPrice').value).toFixed(2);
+    if (name && price) {
+      const menuList = document.getElementById('menu-list');
+      const item = document.createElement('div');
+      item.className = 'menu-item';
+      item.innerHTML = `
+          <span><strong>${name}</strong> - RM ${price}</span>
+          <button class="btn btn-danger" onclick="removeItem(this)">Remove</button>
+        `;
+      menuList.appendChild(item);
+      document.getElementById('itemName').value = '';
+      document.getElementById('itemPrice').value = '';
+    }
+  }
+
+  function removeItem(button) {
+    button.parentElement.remove();
+  }
+  function goBackHome() {
+    window.location.href = "login.html";
+  }
+</script>
+</body>
+</html>
