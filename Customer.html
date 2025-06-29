@@ -555,6 +555,16 @@
                     </div>
                 </div>
 
+                <!-- 支付弹窗 -->
+                <div id="paymentModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background-color:rgba(0,0,0,0.4); z-index:999;">
+                    <div style="background:#fff; border-radius:15px; padding:2rem; width:90%; max-width:400px; margin:10% auto; position:relative;">
+                        <h3>Payment Summary</h3>
+                        <p>Total Amount: <strong>RM <span id="payment-amount">0.00</span></strong></p>
+                        <p>Your Points: <strong><span id="payment-points">0</span> pts</strong></p>
+                        <button onclick="confirmPayment()" style="margin-top: 1rem; background-color:#00bfb2; color:white; padding:0.7rem 1.5rem; border:none; border-radius:10px;">Pay Now</button>
+                    </div>
+                </div>
+
                 <!-- Cart Sidebar -->
                 <div>
                     <div class="order-card" style="position: sticky; top: 140px;">
@@ -730,38 +740,38 @@
         cartTotalElement.innerHTML = `<strong>Total: RM ${cartTotal.toFixed(2)}</strong>`;
     }
 
-    function checkout() {
-        if (cart.length > 0) {
-            alert(`Order confirmed! Total: RM ${cartTotal.toFixed(2)}\n\nYou will receive a notification when your order is ready for pickup.`);
-            cart = [];
-            cartTotal = 0;
-            updateCartDisplay();
-            showPage('dashboard');
-        }
-    }
     let loyaltyPoints = 120;
 
     function checkout() {
         if (cart.length > 0) {
-            loyaltyPoints += Math.floor(cartTotal); // 每消费 RM1 得 1 积分
-            document.getElementById('loyalty-points').textContent = loyaltyPoints;
-
-            if (loyaltyPoints >= 300) {
-                document.getElementById('loyalty-level').textContent = "Platinum Member";
-            } else if (loyaltyPoints >= 200) {
-                document.getElementById('loyalty-level').textContent = "Gold Member";
-            } else {
-                document.getElementById('loyalty-level').textContent = "Silver Member";
-            }
-
-            alert(`Order confirmed! You now have ${loyaltyPoints} points.`);
-
-            cart = [];
-            cartTotal = 0;
-            updateCartDisplay();
-            showPage('dashboard');
+            // 打开支付弹窗并显示金额与积分
+            document.getElementById("payment-amount").textContent = cartTotal.toFixed(2);
+            document.getElementById("payment-points").textContent = loyaltyPoints;
+            document.getElementById("paymentModal").style.display = "block";
         }
     }
+
+    function confirmPayment() {
+        // 模拟支付成功逻辑
+        loyaltyPoints += Math.floor(cartTotal);
+        alert(`Payment Successful! You earned ${Math.floor(cartTotal)} points. Total: ${loyaltyPoints} pts.`);
+
+        // 更新等级显示（如果有）
+        const level = loyaltyPoints >= 300 ? "Platinum Member" :
+            loyaltyPoints >= 200 ? "Gold Member" : "Silver Member";
+        document.getElementById('loyalty-points').textContent = loyaltyPoints;
+        document.getElementById('loyalty-level').textContent = level;
+
+        // 清空购物车、关闭弹窗
+        cart = [];
+        cartTotal = 0;
+        updateCartDisplay();
+        document.getElementById("paymentModal").style.display = "none";
+
+        // 跳转回 dashboard
+        showPage('dashboard');
+    }
+
 
 
     // Initialize cart display
