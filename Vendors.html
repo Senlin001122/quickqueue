@@ -184,18 +184,36 @@
     </div>
   </section>
 
+  <!-- Payment to Platform Section -->
+  <section class="section">
+    <h2>Platform Payment</h2>
+    <p>Total Sales: RM <span id="total-sales">0.00</span></p>
+    <p>Platform Fee (20%): RM <span id="platform-fee">0.00</span></p>
+    <button class="btn btn-primary" onclick="payPlatform()">Pay Platform</button>
+  </section>
+
+  <!-- Payment Modal -->
+  <div id="paymentModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background-color:rgba(0,0,0,0.4); z-index:2000;">
+    <div style="background:#fff; border-radius:10px; width:300px; max-width:90%; margin:150px auto; padding:20px; box-shadow:0 10px 30px rgba(0,0,0,0.2); text-align:center;">
+      <h3>Confirm Payment</h3>
+      <p>Platform Fee: RM <span id="modal-fee">0.00</span></p>
+      <button class="btn btn-primary" onclick="confirmPayment()">Confirm</button>
+      <button class="btn btn-danger" style="margin-left:10px;" onclick="closeModal()">Cancel</button>
+    </div>
+  </div>
+
   <!-- Orders Section -->
   <section class="section">
     <h2>Incoming Orders</h2>
     <div id="orders">
-      <div class="order-item">
+      <div class="order-item" data-price="15.50">
         <div>
           <strong>Order #Q102</strong> - Chicken Chop, Teh Tarik <br/>
           <small>Ordered by Aina at 12:20 PM</small>
         </div>
         <button class="btn btn-primary" onclick="markReady(this)">Mark as Ready</button>
       </div>
-      <div class="order-item">
+      <div class="order-item" data-price="16.00">
         <div>
           <strong>Order #Q103</strong> - Nasi Lemak x2 <br/>
           <small>Ordered by Hanif at 12:25 PM</small>
@@ -303,6 +321,42 @@
   function goBackHome() {
     window.location.href = "index.html"; // 相对路径跳转到首页
   }
+  function calculatePlatformFee() {
+    const orders = document.querySelectorAll('.order-item');
+    let total = 0;
+
+    orders.forEach(order => {
+      const price = parseFloat(order.getAttribute('data-price'));
+      if (!isNaN(price)) {
+        total += price;
+      }
+    });
+
+    const platformFee = total * 0.2;
+
+    document.getElementById('total-sales').textContent = total.toFixed(2);
+    document.getElementById('platform-fee').textContent = platformFee.toFixed(2);
+  }
+
+  function payPlatform() {
+    const fee = document.getElementById('platform-fee').textContent;
+    document.getElementById('modal-fee').textContent = fee;
+    document.getElementById('paymentModal').style.display = 'block';
+  }
+  function confirmPayment() {
+    document.getElementById('paymentModal').style.display = 'none';
+    alert("Payment successful. Thank you for supporting the platform!");
+    // 这里也可以加真实的支付处理逻辑
+  }
+
+  function closeModal() {
+    document.getElementById('paymentModal').style.display = 'none';
+  }
+
+  window.onload = function () {
+    calculatePlatformFee();
+  };
+
 </script>
 </body>
 </html>
